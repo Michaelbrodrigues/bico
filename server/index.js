@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ['https://bico-client.vercel.app'],
+    origin: ['*'],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
