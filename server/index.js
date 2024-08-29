@@ -16,7 +16,13 @@ const app = express();
 //const port = process.env.PORT;
 
 app.use(
-  cors()
+  cors({
+    origin: ['https://bico-client.vercel.app'],
+    methods: ["GET"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 600,
+    credentials: true,
+  })
 );
 
 app.use("/uploads", express.static("uploads"));
