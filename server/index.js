@@ -10,13 +10,17 @@ import { dashboardRoutes } from "./routes/DashboardRoutes.js";
 
 dotenv.config();
 
+const express = require('express');
+const cors = require('cors');
 const app = express();
 //const port = process.env.PORT;
 
 app.use(
   cors({
-    origin: ['*'],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: 'https://bico-client.vercel.app',
+    methods: ["GET"],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 600,
     credentials: true,
   })
 );
