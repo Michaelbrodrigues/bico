@@ -17,7 +17,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://bico-client.vercel.app',
+    origin: ['https://bico-client.vercel.app'],
     methods: ["GET"],
     allowedHeaders: ['Content-Type', 'Authorization'],
     maxAge: 600,
