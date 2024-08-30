@@ -14,7 +14,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 const allowedOrigin = process.env.ORIGIN || 'https://bico-client.vercel.app';
 
-// CORS configuration
+// CORS configurationd
 app.use(cors({
   origin: allowedOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
