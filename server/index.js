@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-const allowedOrigin = process.env.ORIGIN || 'https://bico-client.vercel.app'; // Use environment variable or default to production origin
+const allowedOrigin = process.env.ORIGIN || 'https://bico-client.vercel.app';
 
 // CORS configuration
 app.use(cors({
@@ -20,6 +20,14 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow cookies and other credentials
+}));
+
+// Explicitly handle preflight OPTIONS requests
+app.options('*', cors({
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use("/uploads", express.static("uploads"));
@@ -33,6 +41,11 @@ app.use("/api/gigs", gigRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+
+// Make sure this line is last to handle 404 errors for non-existing routes
+app.use((req, res, next) => {
+  res.status(404).send('Not Found');
+});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
