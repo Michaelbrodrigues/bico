@@ -11,8 +11,8 @@ import { dashboardRoutes } from "./routes/DashboardRoutes.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
-const allowedOrigin = 'https://bico-client.vercel.app';
+const port = process.env.PORT || 3001;
+const allowedOrigin = process.env.ORIGIN || 'https://bico-client.vercel.app'; // Use environment variable or default to production origin
 
 // CORS configuration
 app.use(cors({
@@ -20,14 +20,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow cookies and other credentials
-}));
-
-// Handle preflight OPTIONS request
-app.options('*', cors({
-  origin: allowedOrigin,  // Ensure OPTIONS request also allows specific origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
 }));
 
 app.use("/uploads", express.static("uploads"));
