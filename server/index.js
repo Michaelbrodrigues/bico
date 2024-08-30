@@ -23,7 +23,12 @@ app.use(cors({
 }));
 
 // Handle preflight OPTIONS request
-app.options('*', cors());
+app.options('*', cors({
+  origin: allowedOrigin,  // Ensure OPTIONS request also allows specific origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 app.use("/uploads", express.static("uploads"));
 app.use("/uploads/profiles", express.static("uploads/profiles"));
