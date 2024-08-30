@@ -12,14 +12,21 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
+const allowedOrigins = ['https://bico-client.vercel.app', 'https://bico-client.vercel.app/api/auth/login'];
 
-app.use(
-  cors({
-    origin: ["https://bico-client.vercel.app"],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      callback(null, true);
+    } else {
+      // Block requests from origins not in the allowed list
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use("/uploads", express.static("uploads"));
 app.use("/uploads/profiles", express.static("uploads/profiles"));
