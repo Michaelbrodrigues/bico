@@ -12,12 +12,11 @@ const nextConfig = {
     ],
   },
 
-  // Adding the headers method to handle CORS
+  // Adding the headers method to handle CORS only for API routes
   async headers() {
     return [
       {
-        // Apply headers to all routes
-        source: '/(.*)',
+        source: '/api/(.*)',  // Apply headers only to API routes
         headers: [
           {
             key: 'Access-Control-Allow-Credentials',
@@ -25,8 +24,7 @@ const nextConfig = {
           },
           {
             key: 'Access-Control-Allow-Origin',
-            // Replace with your domain
-            value: 'https://bico-client.vercel.app',
+            value: 'https://bico-client.vercel.app', // Update with your frontend domain
           },
           {
             key: 'Access-Control-Allow-Methods',
@@ -43,4 +41,5 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
+
