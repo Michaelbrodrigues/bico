@@ -1,30 +1,46 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  // Use environment variables that switch based on the environment
-  env: {
-    SERVER_URL: process.env.NODE_ENV === 'production'
-      ? 'https://bico-82vv.onrender.com'  // Use your production backend URL here
-      : 'http://localhost:3001',  // Fallback for local development
-  },
-
   images: {
-    // Allow images from remote domains in production
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**", // Allow all https domains for images (modify as per your need)
+        hostname: "**",
         port: "",
         pathname: "**",
       },
     ],
-    // Define domains for image loading, make sure to include your production domain
-    domains: [
-      "https://bico-82vv.onrender.com", // Your backend's image domain in production
-    ],
+  },
+
+  // Adding the headers method to handle CORS
+  async headers() {
+    return [
+      {
+        // Apply headers to all routes
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            // Replace with your domain
+            value: 'https://bico-client.vercel.app',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
   },
 };
 
 module.exports = nextConfig;
-
