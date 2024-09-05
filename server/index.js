@@ -30,9 +30,9 @@ app.options('*', cors({
   credentials: true
 }));
 
+// Handle 404 for unknown routes
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
+  res.status(404).send('API route not found fuck');
 });
 
 
