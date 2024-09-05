@@ -1,44 +1,31 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
+  // Use environment variables that switch based on the environment
+  env: {
+    SERVER_URL: process.env.NODE_ENV === 'production'
+      ? 'https://bico-six.vercel.app'  // Use your production backend URL here
+      : 'http://localhost:3001',  // Fallback for local development
+  },
+
   images: {
+    // Allow images from remote domains in production
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "**", // Allow all https domains for images (modify as per your need)
         port: "",
         pathname: "**",
       },
     ],
-  },
-
-  // Adding the headers method to handle CORS only for API routes
-  async headers() {
-    return [
-      {
-        source: '/api/(.*)',  // Apply headers only to API routes
-        headers: [
-          {
-            key: 'Access-Control-Allow-Credentials',
-            value: 'true',
-          },
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: 'https://bico-client.vercel.app', // Update with your frontend domain
-          },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value:
-              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
-          },
-        ],
-      },
-    ];
+    // Define domains for image loading, make sure to include your production domain
+    domains: [
+      "localhost",  // Only needed for development
+      "https://bico-six.vercel.app", // Your backend's image domain in production
+    ],
   },
 };
 
 module.exports = nextConfig;
+
