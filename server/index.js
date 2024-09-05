@@ -29,8 +29,6 @@ app.options('*', cors({
 }));
 
 
-
-
 app.use("/uploads", express.static("uploads"));
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 
@@ -42,11 +40,6 @@ app.use("/api/gigs", gigRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-
-// Make sure this line is last to handle 404 errors for non-existing routes
-app.use((req, res, next) => {
-  res.status(404).send('Not Found');
-});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
