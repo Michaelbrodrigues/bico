@@ -12,19 +12,17 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-const allowedOrigin = process.env.ORIGIN;
 
 // CORS configurationd
 app.use(cors({
-  origin: allowedOrigin,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // Allow cookies and other credentials
+  origin: [process.env.ORIGIN],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
 }));
 
 // Explicitly handle preflight OPTIONS requests
 app.options('*', cors({
-  origin: allowedOrigin,
+  origin:  [process.env.ORIGIN],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
