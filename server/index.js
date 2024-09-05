@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-const allowedOrigin = process.env.ORIGIN || 'https://bico-client.vercel.app';
+const allowedOrigin = process.env.ORIGIN;
 
 // CORS configurationd
 app.use(cors({
