@@ -5,7 +5,7 @@ const nextConfig = {
   // Use environment variables that switch based on the environment
   env: {
     SERVER_URL: process.env.NODE_ENV === 'production'
-      ? 'https://bico-82vv.onrender.com'  // Use your production backend URL here
+      ? 'https://bico-six.vercel.app'  // Use your production backend URL here
       : 'http://localhost:3001',  // Fallback for local development
   },
 
@@ -21,7 +21,7 @@ const nextConfig = {
     ],
     // Define domains for image loading, make sure to include your production domain
     domains: [
-      "https://bico-82vv.onrender.com", // Your backend's image domain in production
+      "https://bico-six.vercel.app", // Your backend's image domain in production
     ],
   },
 };
