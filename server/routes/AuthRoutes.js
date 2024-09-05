@@ -14,7 +14,7 @@ const authRoutes = Router();
 const upload = multer({ dest: "uploads/profiles/" });
 
 const corsOptions = {
-  origin: 'https://bico-client-michaelbrodrigues-projects.vercel.app',
+  origin: 'https://bico-client.vercel.app',
   methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
   allowedHeaders: 'Content-Type, Authorization',
   credentials: true,
