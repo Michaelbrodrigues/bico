@@ -21,7 +21,6 @@ const nextConfig = {
     ],
     // Define domains for image loading, make sure to include your production domain
     domains: [
-      "localhost",  // Only needed for development
       "https://bico-six.vercel.app", // Your backend's image domain in production
     ],
   },
