@@ -1,5 +1,4 @@
 import { Router } from "express";
-import cors from "cors";
 import {
   getUserInfo,
   login,
@@ -12,16 +11,6 @@ import multer from "multer";
 
 const authRoutes = Router();
 const upload = multer({ dest: "uploads/profiles/" });
-
-const corsOptions = {
-  origin: 'https://bico-client.vercel.app',
-  methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true,
-};
-
-authRoutes.use(cors(corsOptions));
-authRoutes.options('*', cors(corsOptions)); // Handle preflight requests
 
 authRoutes.post("/signup", signup);
 authRoutes.post("/login", login);
