@@ -42,7 +42,7 @@ function AuthWrapper({ type }) {
 
         if (user) {
           dispatch({ type: reducerCases.SET_USER, userInfo: user });
-          window.location.reload();
+          //window.location.reload();
         }
       }
     } catch (err) {
