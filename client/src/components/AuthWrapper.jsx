@@ -2,8 +2,6 @@ import { useCookies } from "react-cookie";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "../utils/constants";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { MdFacebook } from "react-icons/md";
 import { useRouter } from "next/router";
 import { useStateProvider } from "../context/StateContext";
 import { reducerCases } from "../context/constants";
@@ -37,12 +35,12 @@ function AuthWrapper({ type }) {
           { email, password },
           { withCredentials: true }
         );
-        setCookies("jwt", { jwt: jwt });
+        setCookies("jwt", jwt, { path: '/' });
         dispatch({ type: reducerCases.CLOSE_AUTH_MODAL });
 
         if (user) {
           dispatch({ type: reducerCases.SET_USER, userInfo: user });
-          //window.location.reload();
+          router.push("/dashboard");
         }
       }
     } catch (err) {
