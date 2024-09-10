@@ -83,7 +83,7 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (cookies.jwt && !userInfo) {
+    if (cookies.jwt && userInfo) {
       const getUserInfo = async () => {
         try {
           const {
@@ -125,7 +125,7 @@ function Navbar() {
     } else {
       setIsLoaded(true);
     }
-  }, [cookies, userInfo, dispatch]);
+  }, [cookies, dispatch]);
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
   useEffect(() => {
     const clickListener = (e) => {
