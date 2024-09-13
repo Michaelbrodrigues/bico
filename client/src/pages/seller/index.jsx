@@ -13,6 +13,9 @@ function Index() {
     const getBuyerDashboardData = async () => {
       const response = await axios.get(GET_SELLER_DASHBOARD_DATA, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
       });
       if (response.status === 200) {
         setDashboardData(response.data.dashboardData);
