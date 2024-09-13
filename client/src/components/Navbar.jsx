@@ -144,8 +144,6 @@ function Navbar() {
     {
       name: "Profile",
       callback: (e) => {
-        e.stopPropagation();
-
         setIsContextMenuVisible(false);
         router.push("/profile");
       },
