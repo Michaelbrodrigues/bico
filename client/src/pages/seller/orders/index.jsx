@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 import { useStateProvider } from "../../../context/StateContext";
 import { GET_SELLER_ORDERS_ROUTE, CANCEL_ORDER_ROUTE, ORDERS_ROUTES } from "../../../utils/constants";
 
 function Orders() {
   const [ orders, setOrders] = useState([]);
+  const [cookies] = useCookies();
   const [{ userInfo }] = useStateProvider();
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancellationError, setCancellationError] = useState(null);
@@ -13,7 +15,9 @@ function Orders() {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const { data: { orders } } = await axios.get(GET_SELLER_ORDERS_ROUTE, { withCredentials: true });
+        const { data: { orders } } = await axios.get(GET_SELLER_ORDERS_ROUTE, { withCredentials: true, headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        }, });
         setOrders(orders);
       } catch (err) {
         console.error(err);
@@ -29,7 +33,9 @@ function Orders() {
       console.log('orderId:', orderId);
       //console.log('id:', id);
 
-      await axios.delete(`${ORDERS_ROUTES}/${orderId}`, { withCredentials: true });
+      await axios.delete(`${ORDERS_ROUTES}/${orderId}`, { withCredentials: true, headers: {
+        Authorization: `Bearer ${cookies.jwt}`,
+      }, });
       setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
     } catch (err) {
       console.error(err);
