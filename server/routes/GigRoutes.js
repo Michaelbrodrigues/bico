@@ -12,15 +12,17 @@ import {
 import multer from "multer";
 import { verifyToken } from "../middlewares/AuthMiddleware.js";
 
-const upload = multer({ dest: "uploads/" });
+//const upload = multer({ dest: "uploads/" });
 
 export const gigRoutes = Router();
 // DELETE /gigs/:gigId
 gigRoutes.delete('/:gigId', verifyToken, deleteGig);
-gigRoutes.post("/add", verifyToken, upload.array("images"), addGig);
+// gigRoutes.post("/add", verifyToken, upload.array("images"), addGig);
+gigRoutes.post("/add", verifyToken, addGig);
 gigRoutes.get("/get-user-gigs", verifyToken, getUserAuthGigs);
 gigRoutes.get("/get-gig-data/:gigId", getGigData);
-gigRoutes.put("/edit-gig/:gigId", verifyToken, upload.array("images"), editGig);
+// gigRoutes.put("/edit-gig/:gigId", verifyToken, upload.array("images"), editGig);
+gigRoutes.put("/edit-gig/:gigId", verifyToken, editGig);
 gigRoutes.get("/search-gigs", searchGigs);
 gigRoutes.post("/add-review", verifyToken, addReview);
 gigRoutes.get("/check-gig-order/:gigId", verifyToken, checkGigOrder);

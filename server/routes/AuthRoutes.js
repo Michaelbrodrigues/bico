@@ -10,7 +10,7 @@ import { verifyToken } from "../middlewares/AuthMiddleware.js";
 import multer from "multer";
 
 const authRoutes = Router();
-const upload = multer({ dest: "uploads/profiles/" });
+//const upload = multer({ dest: "uploads/profiles/" });
 
 authRoutes.post("/signup", signup);
 authRoutes.post("/login", login);
@@ -20,7 +20,7 @@ authRoutes.post("/set-user-info", verifyToken, setUserInfo);
 authRoutes.post(
   "/set-user-image",
   verifyToken,
-  upload.single("images"),
+  //upload.single("images"),
   setUserImage
 );
 

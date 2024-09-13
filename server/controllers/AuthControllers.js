@@ -81,6 +81,7 @@ export const login = async (req, res, next) => {
 export const getUserInfo = async (req, res, next) => {
   try {
     if (req?.userId) {
+      console.log(req?.userId)
       const prisma = new PrismaClient();
       const user = await prisma.user.findUnique({
         where: {
@@ -145,25 +146,25 @@ export const setUserInfo = async (req, res, next) => {
 };
 
 export const setUserImage = async (req, res, next) => {
-  try {
-    if (req.file) {
-      if (req?.userId) {
-        const date = Date.now();
-        let fileName = "uploads/profiles/" + date + req.file.originalname;
-        renameSync(req.file.path, fileName);
-        const prisma = new PrismaClient();
+  // try {
+  //   if (req.file) {
+  //     if (req?.userId) {
+  //       const date = Date.now();
+  //       let fileName = "uploads/profiles/" + date + req.file.originalname;
+  //       renameSync(req.file.path, fileName);
+  //       const prisma = new PrismaClient();
 
-        await prisma.user.update({
-          where: { id: req.userId },
-          data: { profileImage: fileName },
-        });
-        return res.status(200).json({ img: fileName });
-      }
-      return res.status(400).send("Cookie Error.");
-    }
-    return res.status(400).send("Image not inclued.");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal Server Occured");
-  }
+  //       await prisma.user.update({
+  //         where: { id: req.userId },
+  //         data: { profileImage: fileName },
+  //       });
+  //       return res.status(200).json({ img: fileName });
+  //     }
+  //     return res.status(400).send("Cookie Error.");
+  //   }
+  //   return res.status(400).send("Image not inclued.");
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(500).send("Internal Server Occured");
+  // }
 };

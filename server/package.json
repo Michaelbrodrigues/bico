@@ -24,7 +24,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "prisma generate && node index.js",
+    "postinstall": "prisma generate"
   },
   "author": "",
   "license": "ISC",
