@@ -53,7 +53,7 @@ function EditGig() {
         } = await axios.get(`${GET_GIG_DATA}/${gigId}`);
 
         //setData({ ...gig, time: gig.revisions });
-        setData({
+          setData({
           title: gig.title || "", // Ensure gig.title is not undefined
           description: gig.description,
           category: gig.category,

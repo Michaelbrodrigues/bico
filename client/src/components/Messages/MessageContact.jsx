@@ -4,6 +4,7 @@ import { BsCheckAll } from "react-icons/bs";
 import axios from "axios";
 import { ADD_PRE_TRANSACTION_MESSAGE, GET_PRE_TRANSACTION_MESSAGES } from "../../utils/constants";
 import { useStateProvider } from "../../context/StateContext";
+import { useCookies } from "react-cookie";
 
 function MessageContact({ recipientId }) {
   const [{ userInfo }] = useStateProvider();
@@ -11,6 +12,7 @@ function MessageContact({ recipientId }) {
   const [messageText, setMessageText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cookies] = useCookies();
 
   useEffect(() => {
     const getMessages = async () => {
@@ -20,7 +22,10 @@ function MessageContact({ recipientId }) {
 
         // Fetch messages from the server
         const response = await axios.get(`${GET_PRE_TRANSACTION_MESSAGES}/${recipientId}`, {
-          withCredentials: false,
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
         });
 
         // Check if the response is successful
@@ -52,7 +57,10 @@ function MessageContact({ recipientId }) {
           recipientId: recipientId, // Ensure recipientId is passed correctly
         },
         {
-          withCredentials: false,
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
         }
       );
 

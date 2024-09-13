@@ -2,17 +2,22 @@ import { GET_USER_GIGS_ROUTE, GIG_ROUTES } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 //import { deleteGig } from "../../../../../server/controllers/GigsController";
 
 function Index() {
   const [gigs, setGigs] = useState([]);
+  const [cookies] = useCookies();
   useEffect(() => {
     const getUserGigs = async () => {
       try {
         const {
           data: { gigs: gigsData },
         } = await axios.get(GET_USER_GIGS_ROUTE, {
-          withCredentials: false,
+          withCredentials: true, 
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
         });
         setGigs(gigsData);
       } catch (err) {
@@ -25,7 +30,10 @@ function Index() {
   const deleteGig = async (id) => {
     try {
       await axios.delete(`${GIG_ROUTES}/${id}`, {
-        withCredentials: false,
+        withCredentials: true, 
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
       });
       setGigs(gigs.filter((gig) => gig.id !== id));
     } catch (err) {

@@ -3,16 +3,20 @@ import { GET_BUYER_ORDERS_ROUTE } from "../../../utils/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [cookies] = useCookies();
   const [{ userInfo }] = useStateProvider();
   useEffect(() => {
     const getOrders = async () => {
       try {
         const {
           data: { orders },
-        } = await axios.get(GET_BUYER_ORDERS_ROUTE, { withCredentials: false });
+        } = await axios.get(GET_BUYER_ORDERS_ROUTE, { withCredentials: true, headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        }, });
         setOrders(orders);
       } catch (err) {
         console.error(err);
