@@ -20,7 +20,7 @@ function MessageContact({ recipientId }) {
 
         // Fetch messages from the server
         const response = await axios.get(`${GET_PRE_TRANSACTION_MESSAGES}/${recipientId}`, {
-          withCredentials: true,
+          withCredentials: false,
         });
 
         // Check if the response is successful
@@ -52,7 +52,7 @@ function MessageContact({ recipientId }) {
           recipientId: recipientId, // Ensure recipientId is passed correctly
         },
         {
-          withCredentials: true,
+          withCredentials: false,
         }
       );
 

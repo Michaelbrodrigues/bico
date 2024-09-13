@@ -12,7 +12,7 @@ function Index() {
         const {
           data: { gigs: gigsData },
         } = await axios.get(GET_USER_GIGS_ROUTE, {
-          withCredentials: true,
+          withCredentials: false,
         });
         setGigs(gigsData);
       } catch (err) {
@@ -25,7 +25,7 @@ function Index() {
   const deleteGig = async (id) => {
     try {
       await axios.delete(`${GIG_ROUTES}/${id}`, {
-        withCredentials: true,
+        withCredentials: false,
       });
       setGigs(gigs.filter((gig) => gig.id !== id));
     } catch (err) {

@@ -36,7 +36,7 @@ function Gig() {
       const {
         data: { hasUserOrderedGig },
       } = await axios.get(`${CHECK_USER_ORDERED_GIG_ROUTE}/${gigId}`, {
-        withCredentials: true,
+        withCredentials: false,
       });
       dispatch({
         type: reducerCases.HAS_USER_ORDERED_GIG,
