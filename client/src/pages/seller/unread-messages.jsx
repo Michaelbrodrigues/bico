@@ -1,18 +1,21 @@
 import { useStateProvider } from "../../context/StateContext";
 import { GET_UNREAD_MESSAGES, MARK_AS_READ_ROUTE } from "../../utils/constants";
-
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 function UnreadMessages() {
   const [{ userInfo }] = useStateProvider();
+  const [cookies] = useCookies();
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     const getUnreadMessages = async () => {
       const {
         data: { messages: unreadMessages },
-      } = await axios.get(GET_UNREAD_MESSAGES, { withCredentials: true });
+      } = await axios.get(GET_UNREAD_MESSAGES, { withCredentials: true, headers: {
+        Authorization: `Bearer ${cookies.jwt}`,
+      }, });
       setMessages(unreadMessages);
     };
     if (userInfo) {
@@ -24,7 +27,9 @@ function UnreadMessages() {
     const response = await axios.put(
       `${MARK_AS_READ_ROUTE}/${id}`,
       {},
-      { withCredentials: true }
+      { withCredentials: true, headers: {
+        Authorization: `Bearer ${cookies.jwt}`,
+      }, }
     );
     if (response.status === 200) {
       const clonedMessages = [...messages];

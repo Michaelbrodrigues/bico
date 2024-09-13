@@ -3,12 +3,14 @@ import axios from "axios";
 import { GET_PRE_TRANSACTION_MESSAGES } from "../../utils/constants";
 import { useStateProvider } from "../../context/StateContext";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 function PreSaleUnreadMessages() {
   const [{ userInfo }] = useStateProvider();
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cookies] = useCookies();
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -17,6 +19,9 @@ function PreSaleUnreadMessages() {
       try {
         const response = await axios.get(`${GET_PRE_TRANSACTION_MESSAGES}/${userInfo.id}`, {
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
         });
         if (response.status === 200) {
           // Only set the first message if available
