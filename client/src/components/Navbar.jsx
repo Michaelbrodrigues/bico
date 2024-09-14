@@ -124,11 +124,11 @@ function Navbar() {
       setIsLoaded(true);
     }
   }, [cookies, dispatch]);
+
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false);
   useEffect(() => {
     const clickListener = (e) => {
       e.stopPropagation();
-
       if (isContextMenuVisible) setIsContextMenuVisible(false);
     };
     if (isContextMenuVisible) {
@@ -161,7 +161,7 @@ function Navbar() {
     <>
       {isLoaded && (
         <nav
-          className={`w-full px-4 sm:px-8 lg:px-16 xl:px-24 flex justify-between items-center py-6  top-0 z-30 transition-all duration-300 ${
+          className={`w-full px-4 sm:px-8 lg:px-16 xl:px-24 flex justify-between items-center py-6 top-0 z-30 transition-all duration-300 ${
             navFixed || userInfo
               ? "fixed bg-white border-b border-gray-200"
               : "absolute bg-transparent border-transparent"
@@ -175,7 +175,6 @@ function Navbar() {
               />
             </Link>
           </div>
-
           <div
             className={`flex ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}
           >
@@ -196,20 +195,15 @@ function Navbar() {
               <IoSearchOutline className="fill-white text-white h-6 w-6" />
             </button>
           </div>
-
           {!userInfo ? (
             <ul className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
               {links.map(({ linkName, handler, type }) => (
                 <li
                   key={linkName}
-                  className={`${
-                    navFixed ? "text-black" : "text-white"
-                  } font-medium`}
+                  className={`${navFixed ? "text-black" : "text-white"} font-medium`}
                 >
                   {type === "link" && <Link href={handler}>{linkName}</Link>}
-                  {type === "button" && (
-                    <button onClick={handler}>{linkName}</button>
-                  )}
+                  {type === "button" && <button onClick={handler}>{linkName}</button>}
                   {type === "button2" && (
                     <button
                       onClick={handler}
@@ -241,12 +235,16 @@ function Navbar() {
               >
                 Orders
               </li>
-              <li
-                className="cursor-pointer font-medium"
-                onClick={handleModeSwitch}
-              >
-                {isSeller ? "Switch To Buyer" : "Switch To Seller"}
-              </li>
+
+              {isSeller ? (
+                <li className="cursor-pointer font-medium" onClick={handleModeSwitch}>
+                  Switch To Buyer
+                </li>
+              ) : (
+                <li className="cursor-pointer font-medium" onClick={handleModeSwitch}>
+                  Switch To Seller
+                </li>
+              )}
               <li
                 className="cursor-pointer"
                 onClick={(e) => {
@@ -266,14 +264,13 @@ function Navbar() {
                 ) : (
                   <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
                     <span className="text-xl text-white">
-                      {userInfo?.email?.[0]?.toUpperCase()}
+                      {userInfo?.email?.split("")[0].toUpperCase()}
                     </span>
                   </div>
                 )}
               </li>
             </ul>
           )}
-
           {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
         </nav>
       )}
