@@ -284,9 +284,6 @@ function Navbar() {
   </ul>
 )}
 
-              /* Here's the remaining portion of the mobile menu and some final tweaks to make it more responsive:
-
-```jsx*/
 {links && links.length > 0 ? (
   links.map(({ linkName, handler, type }) => (
     <li key={linkName} className="text-black font-medium">
