@@ -20,6 +20,8 @@ function Navbar() {
   const [{ showLoginModal, showSignupModal, isSeller, userInfo }, dispatch] =
     useStateProvider();
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const handleLogin = () => {
     if (showSignupModal) {
       dispatch({
@@ -175,8 +177,39 @@ function Navbar() {
               />
             </Link>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="sm:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-black"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d={
+                    isMobileMenuOpen
+                      ? "M6 18L18 6M6 6l12 12"
+                      : "M4 6h16M4 12h16m-7 6h7"
+                  }
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Search Input */}
           <div
-            className={`flex ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}
+            className={`hidden sm:flex ${
+              navFixed || userInfo ? "opacity-100" : "opacity-0"
+            }`}
           >
             <input
               type="text"
@@ -195,32 +228,84 @@ function Navbar() {
               <IoSearchOutline className="fill-white text-white h-6 w-6" />
             </button>
           </div>
-          {!userInfo ? (
-            <ul className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
-              {links.map(({ linkName, handler, type }) => (
-                <li
-                  key={linkName}
-                  className={`${navFixed ? "text-black" : "text-white"} font-medium`}
-                >
-                  {type === "link" && <Link href={handler}>{linkName}</Link>}
-                  {type === "button" && <button onClick={handler}>{linkName}</button>}
-                  {type === "button2" && (
-                    <button
-                      onClick={handler}
-                      className={`border text-md font-semibold py-1 px-3 rounded-sm ${
-                        navFixed
-                          ? "border-[#1DBF73] text-[#1DBF73]"
-                          : "border-white text-white"
-                      } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
-                    >
-                      {linkName}
-                    </button>
-                  )}
-                </li>
-              ))}
+
+          {/* Links for larger screens */}
+          <ul className="hidden sm:flex gap-4 sm:gap-10 items-center">
+            {!userInfo
+              ? links.map(({ linkName, handler, type }) => (
+                  <li
+                    key={linkName}
+                    className={`${
+                      navFixed ? "text-black" : "text-white"
+                    } font-medium`}
+                  >
+                    {type === "link" && <Link href={handler}>{linkName}</Link>}
+                    {type === "button" && (
+                      <button onClick={handler}>{linkName}</button>
+                    )}
+                    {type === "button2" && (
+                      <button
+                        onClick={handler}
+                        className={`border text-md font-semibold py-1 px-3 rounded-sm ${
+                          navFixed
+                            ? "border-[#1DBF73] text-[#1DBF73]"
+                            : "border-white text-white"
+                        } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                      >
+                        {linkName}
+                      </button>
+                    )}
+                  </li>
+                ))
+              : null}
+          </ul>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <ul className="flex flex-col sm:hidden gap-4 items-center absolute bg-white w-full top-16 left-0 z-50 p-4">
+              {!userInfo
+                ? links.map(({ linkName, handler, type }) => (
+                    <li key={linkName} className="text-black font-medium">
+                      {type === "link" && <Link href={handler}>{linkName}</Link>}
+                      {type === "button" && (
+                        <button onClick={handler}>{linkName}</button>
+                      )}
+                      {type === "button2" && (
+                        <button
+                          onClick={handler}
+                          className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
+                        >
+                          {linkName}
+                        </button>
+                      )}
+                    </li>
+                  ))
+              /* Here's the remaining portion of the mobile menu and some final tweaks to make it more responsive:
+
+```jsx*/
+                ? links.map(({ linkName, handler, type }) => (
+                    <li key={linkName} className="text-black font-medium">
+                      {type === "link" && <Link href={handler}>{linkName}</Link>}
+                      {type === "button" && (
+                        <button onClick={handler}>{linkName}</button>
+                      )}
+                      {type === "button2" && (
+                        <button
+                          onClick={handler}
+                          className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
+                        >
+                          {linkName}
+                        </button>
+                      )}
+                    </li>
+                  ))
+                : null}
             </ul>
-          ) : (
-            <ul className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
+          )}
+
+          {/* User info or contextual menu for larger screens */}
+          {userInfo && (
+            <ul className="hidden sm:flex gap-4 sm:gap-10 items-center">
               {isSeller && (
                 <li
                   className="cursor-pointer text-[#1DBF73] font-medium"
