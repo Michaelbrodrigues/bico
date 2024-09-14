@@ -49,7 +49,6 @@ function Navbar() {
   const links = [
     { linkName: "Gigger Business", handler: "#", type: "link" },
     { linkName: "Explore", handler: "#", type: "link" },
-    //{ linkName: "English", handler: "#", type: "link" },
     { linkName: "Become a Seller", handler: "#", type: "link" },
     { linkName: "Log in", handler: handleLogin, type: "button" },
     { linkName: "Sign up", handler: handleSignup, type: "button2" },
@@ -112,7 +111,6 @@ function Navbar() {
             userInfo: projectedUserInfo,
           });
           setIsLoaded(true);
-          console.log({ user });
           if (user.isProfileSet === false) {
             router.push("/profile");
           }
@@ -140,6 +138,7 @@ function Navbar() {
       window.removeEventListener("click", clickListener);
     };
   }, [isContextMenuVisible]);
+
   const ContextMenuData = [
     {
       name: "Profile",
@@ -152,7 +151,6 @@ function Navbar() {
       name: "Logout",
       callback: (e) => {
         e.stopPropagation();
-
         setIsContextMenuVisible(false);
         router.push("/logout");
       },
@@ -163,7 +161,7 @@ function Navbar() {
     <>
       {isLoaded && (
         <nav
-          className={`w-full px-24 flex justify-between items-center py-6  top-0 z-30 transition-all duration-300 ${
+          className={`w-full px-4 sm:px-8 lg:px-16 xl:px-24 flex justify-between items-center py-6  top-0 z-30 transition-all duration-300 ${
             navFixed || userInfo
               ? "fixed bg-white border-b border-gray-200"
               : "absolute bg-transparent border-transparent"
@@ -172,19 +170,19 @@ function Navbar() {
           <div>
             <Link href="/">
               <FiverrLogo
+                className="w-20 sm:w-28 lg:w-36"
                 fillColor={!navFixed && !userInfo ? "#ffffff" : "#404145"}
               />
             </Link>
           </div>
+
           <div
-            className={`flex ${
-              navFixed || userInfo ? "opacity-100" : "opacity-0"
-            }`}
+            className={`flex ${navFixed || userInfo ? "opacity-100" : "opacity-0"}`}
           >
             <input
               type="text"
               placeholder="What service are you looking for today?"
-              className="w-[30rem] py-2.5 px-4 border"
+              className="w-full sm:w-[15rem] lg:w-[30rem] py-2.5 px-4 border"
               value={searchData}
               onChange={(e) => setSearchData(e.target.value)}
             />
@@ -198,38 +196,37 @@ function Navbar() {
               <IoSearchOutline className="fill-white text-white h-6 w-6" />
             </button>
           </div>
+
           {!userInfo ? (
-            <ul className="flex gap-10 items-center">
-              {links.map(({ linkName, handler, type }) => {
-                return (
-                  <li
-                    key={linkName}
-                    className={`${
-                      navFixed ? "text-black" : "text-white"
-                    } font-medium`}
-                  >
-                    {type === "link" && <Link href={handler}>{linkName}</Link>}
-                    {type === "button" && (
-                      <button onClick={handler}>{linkName}</button>
-                    )}
-                    {type === "button2" && (
-                      <button
-                        onClick={handler}
-                        className={`border   text-md font-semibold py-1 px-3 rounded-sm ${
-                          navFixed
-                            ? "border-[#1DBF73] text-[#1DBF73]"
-                            : "border-white text-white"
-                        } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
-                      >
-                        {linkName}
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
+            <ul className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
+              {links.map(({ linkName, handler, type }) => (
+                <li
+                  key={linkName}
+                  className={`${
+                    navFixed ? "text-black" : "text-white"
+                  } font-medium`}
+                >
+                  {type === "link" && <Link href={handler}>{linkName}</Link>}
+                  {type === "button" && (
+                    <button onClick={handler}>{linkName}</button>
+                  )}
+                  {type === "button2" && (
+                    <button
+                      onClick={handler}
+                      className={`border text-md font-semibold py-1 px-3 rounded-sm ${
+                        navFixed
+                          ? "border-[#1DBF73] text-[#1DBF73]"
+                          : "border-white text-white"
+                      } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                    >
+                      {linkName}
+                    </button>
+                  )}
+                </li>
+              ))}
             </ul>
           ) : (
-            <ul className="flex gap-10 items-center">
+            <ul className="flex flex-col sm:flex-row gap-4 sm:gap-10 items-center">
               {isSeller && (
                 <li
                   className="cursor-pointer text-[#1DBF73] font-medium"
@@ -244,22 +241,12 @@ function Navbar() {
               >
                 Orders
               </li>
-
-              {isSeller ? (
-                <li
-                  className="cursor-pointer font-medium"
-                  onClick={handleModeSwitch}
-                >
-                  Switch To Buyer
-                </li>
-              ) : (
-                <li
-                  className="cursor-pointer font-medium"
-                  onClick={handleModeSwitch}
-                >
-                  Switch To Seller
-                </li>
-              )}
+              <li
+                className="cursor-pointer font-medium"
+                onClick={handleModeSwitch}
+              >
+                {isSeller ? "Switch To Buyer" : "Switch To Seller"}
+              </li>
               <li
                 className="cursor-pointer"
                 onClick={(e) => {
@@ -272,22 +259,21 @@ function Navbar() {
                   <Image
                     src={userInfo.imageName}
                     alt="Profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
+                    width={30}
+                    height={30}
+                    className="rounded-full sm:w-10 sm:h-10"
                   />
                 ) : (
                   <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
                     <span className="text-xl text-white">
-                      {userInfo &&
-                        userInfo?.email &&
-                        userInfo?.email.split("")[0].toUpperCase()}
+                      {userInfo?.email?.[0]?.toUpperCase()}
                     </span>
                   </div>
                 )}
               </li>
             </ul>
           )}
+
           {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
         </nav>
       )}
