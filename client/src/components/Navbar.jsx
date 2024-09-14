@@ -260,48 +260,52 @@ function Navbar() {
               : null}
           </ul>
 
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <ul className="flex flex-col sm:hidden gap-4 items-center absolute bg-white w-full top-16 left-0 z-50 p-4">
-              {!userInfo
-                ? links.map(({ linkName, handler, type }) => (
-                    <li key={linkName} className="text-black font-medium">
-                      {type === "link" && <Link href={handler}>{linkName}</Link>}
-                      {type === "button" && (
-                        <button onClick={handler}>{linkName}</button>
-                      )}
-                      {type === "button2" && (
-                        <button
-                          onClick={handler}
-                          className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
-                        >
-                          {linkName}
-                        </button>
-                      )}
-                    </li>
-                  ))
+{/* Mobile Menu */}
+{isMobileMenuOpen && (
+  <ul className="flex flex-col sm:hidden gap-4 items-center absolute bg-white w-full top-16 left-0 z-50 p-4">
+    {!userInfo
+      ? links.map(({ linkName, handler, type }) => (
+          <li key={linkName} className="text-black font-medium">
+            {type === "link" && <Link href={handler}>{linkName}</Link>}
+            {type === "button" && (
+              <button onClick={handler}>{linkName}</button>
+            )}
+            {type === "button2" && (
+              <button
+                onClick={handler}
+                className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
+              >
+                {linkName}
+              </button>
+            )}
+          </li>
+        ))
+      : null}
+  </ul>
+)}
+
               /* Here's the remaining portion of the mobile menu and some final tweaks to make it more responsive:
 
 ```jsx*/
-                ? links.map(({ linkName, handler, type }) => (
-                    <li key={linkName} className="text-black font-medium">
-                      {type === "link" && <Link href={handler}>{linkName}</Link>}
-                      {type === "button" && (
-                        <button onClick={handler}>{linkName}</button>
-                      )}
-                      {type === "button2" && (
-                        <button
-                          onClick={handler}
-                          className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
-                        >
-                          {linkName}
-                        </button>
-                      )}
-                    </li>
-                  ))
-                : null}
-            </ul>
-          )}
+{links && links.length > 0 ? (
+  links.map(({ linkName, handler, type }) => (
+    <li key={linkName} className="text-black font-medium">
+      {type === "link" && <Link href={handler}>{linkName}</Link>}
+      {type === "button" && (
+        <button onClick={handler}>{linkName}</button>
+      )}
+      {type === "button2" && (
+        <button
+          onClick={handler}
+          className="border border-[#1DBF73] text-[#1DBF73] hover:bg-[#1DBF73] hover:text-white py-2 px-4 rounded"
+        >
+          {linkName}
+        </button>
+      )}
+    </li>
+  ))
+) : null}
+
 
           {/* User info or contextual menu for larger screens */}
           {userInfo && (
