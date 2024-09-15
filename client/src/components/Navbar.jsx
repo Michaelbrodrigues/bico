@@ -219,7 +219,7 @@ function Navbar() {
                       <li>
                         <button
                           className={`${
-                            navFixed ? "text-black" : "text-white"
+                            navFixed ? "text-black" : "text-black"
                           } flex items-center gap-2 font-medium`}
                           onClick={handleOrdersNavigate}
                         >
@@ -229,7 +229,7 @@ function Navbar() {
                       <li>
                         <button
                           className={`${
-                            navFixed ? "text-black" : "text-white"
+                            navFixed ? "text-black" : "text-black"
                           } flex items-center gap-2 font-medium`}
                           onClick={handleModeSwitch}
                         >
