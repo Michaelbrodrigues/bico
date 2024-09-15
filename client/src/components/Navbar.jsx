@@ -50,7 +50,6 @@ function Navbar() {
   const links = [
     { linkName: "Gigger Business", handler: "#", type: "link" },
     { linkName: "Explore", handler: "#", type: "link" },
-    //{ linkName: "English", handler: "#", type: "link" },
     { linkName: "Become a Seller", handler: "#", type: "link" },
     { linkName: "Log in", handler: handleLogin, type: "button" },
     { linkName: "Sign up", handler: handleSignup, type: "button2" },
@@ -70,7 +69,7 @@ function Navbar() {
 
   const handleOrdersNavigate = () => {
     if (isSeller) router.push("/seller/orders");
-    router.push("/buyer/orders");
+    else router.push("/buyer/orders");
   };
 
   const handleModeSwitch = () => {
@@ -113,7 +112,6 @@ function Navbar() {
             userInfo: projectedUserInfo,
           });
           setIsLoaded(true);
-          console.log({ user });
           if (user.isProfileSet === false) {
             router.push("/profile");
           }
@@ -190,38 +188,65 @@ function Navbar() {
           {isMobileMenuOpen && (
             <div className="md:hidden w-full mt-4">
               <ul className="flex flex-col gap-4 items-center">
-                {links.map(({ linkName, handler, type }) => (
-                  <li
-                    key={linkName}
-                    className={`${
-                      navFixed ? "text-black" : "text-white"
-                    } font-medium`}
-                  >
-                    {type === "link" && <Link href={handler}>{linkName}</Link>}
-                    {type === "button" && (
-                      <button onClick={handler}>{linkName}</button>
-                    )}
-                    {type === "button2" && (
-                      <button
-                        onClick={handler}
-                        className={`border text-md font-semibold py-1 px-3 rounded-sm ${
-                          navFixed
-                            ? "border-[#1DBF73] text-[#1DBF73]"
-                            : "border-white text-white"
-                        } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                {!userInfo
+                  ? links.map(({ linkName, handler, type }) => (
+                      <li
+                        key={linkName}
+                        className={`${
+                          navFixed ? "text-black" : "text-white"
+                        } font-medium`}
                       >
-                        {linkName}
-                      </button>
-                    )}
-                  </li>
-                ))}
+                        {type === "link" && <Link href={handler}>{linkName}</Link>}
+                        {type === "button" && (
+                          <button onClick={handler}>{linkName}</button>
+                        )}
+                        {type === "button2" && (
+                          <button
+                            onClick={handler}
+                            className={`border text-md font-semibold py-1 px-3 rounded-sm ${
+                              navFixed
+                                ? "border-[#1DBF73] text-[#1DBF73]"
+                                : "border-white text-white"
+                            } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                          >
+                            {linkName}
+                          </button>
+                        )}
+                      </li>
+                    ))
+                  : (
+                    <>
+                      <li>
+                        <button
+                          className={`${
+                            navFixed ? "text-black" : "text-white"
+                          } flex items-center gap-2 font-medium`}
+                          onClick={handleOrdersNavigate}
+                        >
+                          Orders
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          className={`${
+                            navFixed ? "text-black" : "text-white"
+                          } flex items-center gap-2 font-medium`}
+                          onClick={handleModeSwitch}
+                        >
+                          {isSeller ? "Switch to Buyer" : "Switch to Seller"}
+                        </button>
+                      </li>
+                    </>
+                  )}
               </ul>
             </div>
           )}
 
           {/* Desktop Menu */}
           <div
-            className={`hidden md:flex ${navFixed || userInfo ? "opacity-100" : "opacity-0"} items-center space-x-4 md:space-x-6`}
+            className={`hidden md:flex ${
+              navFixed || userInfo ? "opacity-100" : "opacity-0"
+            } items-center space-x-4 md:space-x-6`}
           >
             <input
               type="text"
@@ -251,9 +276,7 @@ function Navbar() {
                   } font-medium`}
                 >
                   {type === "link" && <Link href={handler}>{linkName}</Link>}
-                  {type === "button" && (
-                    <button onClick={handler}>{linkName}</button>
-                  )}
+                  {type === "button" && <button onClick={handler}>{linkName}</button>}
                   {type === "button2" && (
                     <button
                       onClick={handler}
