@@ -21,10 +21,11 @@ function Navbar() {
     useStateProvider();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Sticky navbar effect
   useEffect(() => {
     if (router.pathname === "/") {
       const positionNavbar = () => {
-        window.pageYOffset > 0 ? setNavFixed(true) : setNavFixed(false);
+        setNavFixed(window.pageYOffset > 0);
       };
       window.addEventListener("scroll", positionNavbar);
       return () => window.removeEventListener("scroll", positionNavbar);
@@ -33,6 +34,7 @@ function Navbar() {
     }
   }, [router.pathname]);
 
+  // Handle Login/Signup
   const handleLogin = () => {
     dispatch({
       type: reducerCases.TOGGLE_LOGIN_MODAL,
@@ -47,10 +49,12 @@ function Navbar() {
     });
   };
 
+  // Navigate to Orders
   const handleOrdersNavigate = () => {
     router.push(isSeller ? "/seller/orders" : "/buyer/orders");
   };
 
+  // Switch between buyer and seller modes
   const handleModeSwitch = () => {
     dispatch({ type: reducerCases.SWITCH_MODE });
     router.push(isSeller ? "/buyer/orders" : "/seller");
@@ -64,8 +68,9 @@ function Navbar() {
     { linkName: "Sign up", handler: handleSignup, type: "button2" },
   ];
 
+  // Fetch User Info
   useEffect(() => {
-    if (cookies.jwt && userInfo) {
+    if (cookies.jwt && !userInfo) {
       const getUserInfo = async () => {
         try {
           const { data: { user } } = await axios.post(
@@ -76,7 +81,6 @@ function Navbar() {
               headers: { Authorization: `Bearer ${cookies.jwt}` },
             }
           );
-
           dispatch({
             type: reducerCases.SET_USER,
             userInfo: { ...user, imageName: user.image ? HOST + "/" + user.image : null },
@@ -84,20 +88,23 @@ function Navbar() {
           setIsLoaded(true);
           if (!user.isProfileSet) router.push("/profile");
         } catch (err) {
-          console.log(err);
+          console.log("Error fetching user info:", err);
+          // Redirect to login if token invalid
+          router.push("/login");
         }
       };
       getUserInfo();
     } else {
       setIsLoaded(true);
     }
-  }, [cookies, dispatch]);
+  }, [cookies.jwt, dispatch, router, userInfo]);
 
   return (
     <>
       {isLoaded && (
         <nav
-          className={`w-full px-4 sm:px-8 lg:px-16 flex justify-between items-center py-4 z-30 transition-all duration-300 ${navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent"}`}
+          className={`w-full px-4 sm:px-8 lg:px-16 flex justify-between items-center py-4 z-30 transition-all duration-300 ${navFixed || userInfo ? "fixed bg-white border-b border-gray-200" : "absolute bg-transparent"
+            }`}
         >
           {/* Logo */}
           <div>
