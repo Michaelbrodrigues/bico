@@ -17,9 +17,9 @@ function Navbar() {
   const [navFixed, setNavFixed] = useState(false);
   const [searchData, setSearchData] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [{ showLoginModal, showSignupModal, isSeller, userInfo }, dispatch] =
     useStateProvider();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogin = () => {
     if (showSignupModal) {
@@ -50,6 +50,7 @@ function Navbar() {
   const links = [
     { linkName: "Gigger Business", handler: "#", type: "link" },
     { linkName: "Explore", handler: "#", type: "link" },
+    //{ linkName: "English", handler: "#", type: "link" },
     { linkName: "Become a Seller", handler: "#", type: "link" },
     { linkName: "Log in", handler: handleLogin, type: "button" },
     { linkName: "Sign up", handler: handleSignup, type: "button2" },
@@ -112,6 +113,7 @@ function Navbar() {
             userInfo: projectedUserInfo,
           });
           setIsLoaded(true);
+          console.log({ user });
           if (user.isProfileSet === false) {
             router.push("/profile");
           }
@@ -168,53 +170,79 @@ function Navbar() {
               : "absolute bg-transparent border-transparent"
           }`}
         >
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full md:w-auto">
             <Link href="/">
               <FiverrLogo
                 fillColor={!navFixed && !userInfo ? "#ffffff" : "#404145"}
                 className="w-20 h-auto"
               />
             </Link>
-
             {/* Mobile Menu Toggle Button */}
-            {router.pathname !== "/" && (
-              <button
-                className="md:hidden flex items-center text-2xl"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                ☰
-              </button>
-            )}
+            <button
+              className="md:hidden flex items-center text-2xl"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              ☰
+            </button>
           </div>
 
-          {/* Show the full navbar only on home page, otherwise show only toggle */}
-          {router.pathname === "/" && (
-            <div
-              className={`flex ${
-                navFixed || userInfo ? "opacity-100" : "opacity-0"
-              } items-center space-x-4 md:space-x-6`}
-            >
-              <input
-                type="text"
-                placeholder="What service are you looking for today?"
-                className="w-full md:w-[30rem] py-2 px-4 border rounded-md"
-                value={searchData}
-                onChange={(e) => setSearchData(e.target.value)}
-              />
-              <button
-                className="bg-gray-900 py-1.5 text-white w-12 md:w-16 flex justify-center items-center rounded-md"
-                onClick={() => {
-                  setSearchData("");
-                  router.push(`/search?q=${searchData}`);
-                }}
-              >
-                <IoSearchOutline className="fill-white text-white h-5 w-5 md:h-6 md:w-6" />
-              </button>
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden w-full mt-4">
+              <ul className="flex flex-col gap-4 items-center">
+                {links.map(({ linkName, handler, type }) => (
+                  <li
+                    key={linkName}
+                    className={`${
+                      navFixed ? "text-black" : "text-white"
+                    } font-medium`}
+                  >
+                    {type === "link" && <Link href={handler}>{linkName}</Link>}
+                    {type === "button" && (
+                      <button onClick={handler}>{linkName}</button>
+                    )}
+                    {type === "button2" && (
+                      <button
+                        onClick={handler}
+                        className={`border text-md font-semibold py-1 px-3 rounded-sm ${
+                          navFixed
+                            ? "border-[#1DBF73] text-[#1DBF73]"
+                            : "border-white text-white"
+                        } hover:bg-[#1DBF73] hover:text-white hover:border-[#1DBF73] transition-all duration-500`}
+                      >
+                        {linkName}
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
-          {!userInfo && router.pathname === "/" ? (
-            <ul className="flex flex-col md:flex-row gap-4 md:gap-10 items-center mt-4 md:mt-0">
+          {/* Desktop Menu */}
+          <div
+            className={`hidden md:flex ${navFixed || userInfo ? "opacity-100" : "opacity-0"} items-center space-x-4 md:space-x-6`}
+          >
+            <input
+              type="text"
+              placeholder="What service are you looking for today?"
+              className="w-full md:w-[30rem] py-2 px-4 border rounded-md"
+              value={searchData}
+              onChange={(e) => setSearchData(e.target.value)}
+            />
+            <button
+              className="bg-gray-900 py-1.5 text-white w-12 md:w-16 flex justify-center items-center rounded-md"
+              onClick={() => {
+                setSearchData("");
+                router.push(`/search?q=${searchData}`);
+              }}
+            >
+              <IoSearchOutline className="fill-white text-white h-5 w-5 md:h-6 md:w-6" />
+            </button>
+          </div>
+
+          {!userInfo ? (
+            <ul className="hidden md:flex gap-4 md:gap-10 items-center mt-4 md:mt-0">
               {links.map(({ linkName, handler, type }) => (
                 <li
                   key={linkName}
@@ -241,55 +269,53 @@ function Navbar() {
                 </li>
               ))}
             </ul>
-          ) : userInfo ? (
-            <ul className="flex flex-col md:flex-row gap-4 md:gap-10 items-center mt-4 md:mt-0">
-              {isSeller && (
-                <li
-                  className="cursor-pointer text-[#1DBF73] font-medium"
-                  onClick={() => router.push("/seller/gigs/create")}
+          ) : (
+            <ul className="hidden md:flex gap-4 md:gap-10 items-center mt-4 md:mt-0">
+              <li>
+                <button
+                  className={`${
+                    navFixed ? "text-black" : "text-white"
+                  } flex items-center gap-2 font-medium`}
+                  onClick={handleOrdersNavigate}
                 >
-                  Create Gig
-                </li>
-              )}
-              <li
-                className="cursor-pointer text-[#1DBF73] font-medium"
-                onClick={handleOrdersNavigate}
-              >
-                Orders
+                  Orders
+                </button>
               </li>
-              {isSeller ? (
-                <li
-                  className="cursor-pointer font-medium"
+              <li>
+                <button
+                  className={`${
+                    navFixed ? "text-black" : "text-white"
+                  } flex items-center gap-2 font-medium`}
                   onClick={handleModeSwitch}
                 >
-                  Switch To Buyer
-                </li>
-              ) : (
-                <li
-                  className="cursor-pointer font-medium"
-                  onClick={handleModeSwitch}
-                >
-                  Switch To Seller
-                </li>
-              )}
-              <li
-                className="cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsContextMenuVisible((prev) => !prev);
-                }}
-              >
+                  {isSeller ? "Switch to Buyer" : "Switch to Seller"}
+                </button>
+              </li>
+              <li>
                 {userInfo?.imageName ? (
-                  <Image
-                    src={userInfo?.imageName}
-                    alt="profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                  />
+                  <div
+                    className="relative w-8 h-8 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsContextMenuVisible(!isContextMenuVisible);
+                    }}
+                  >
+                    <Image
+                      src={userInfo.imageName}
+                      alt="User profile"
+                      fill
+                      className="object-cover rounded-full"
+                    />
+                  </div>
                 ) : (
-                  <div className="flex justify-center items-center h-10 w-10 rounded-full bg-[#1DBF73] text-white">
-                    <span className="text-2xl">
+                  <div
+                    className="w-8 h-8 rounded-full bg-green-600 flex justify-center items-center cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsContextMenuVisible(!isContextMenuVisible);
+                    }}
+                  >
+                    <span className="text-sm font-semibold text-white">
                       {userInfo?.email &&
                         userInfo?.email.charAt(0).toUpperCase()}
                     </span>
@@ -297,7 +323,7 @@ function Navbar() {
                 )}
               </li>
             </ul>
-          ) : null}
+          )}
           {isContextMenuVisible && <ContextMenu data={ContextMenuData} />}
         </nav>
       )}
