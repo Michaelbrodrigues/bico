@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { BsCheckCircle } from "react-icons/bs";
+
 function Everything() {
   const everythingData = [
     {
@@ -24,28 +25,27 @@ function Everything() {
         "Our round-the-clock support team is available to help anytime, anywhere.",
     },
   ];
+
   return (
-    <div className="bg-[#f1fdf7] flex py-20 justify-between px-24">
-      <div>
-        <h2 className="text-4xl mb-5 text-[#404145] font-bold">
+    <div className="bg-[#f1fdf7] py-10 sm:py-16 lg:py-20 px-4 sm:px-8 lg:px-24 flex flex-col lg:flex-row justify-between gap-10">
+      <div className="lg:w-2/4">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-5 text-[#404145] font-bold">
           Why choose Gigger.
         </h2>
-        <ul className="flex flex-col gap-10">
-          {everythingData.map(({ title, subtitle }) => {
-            return (
-              <li key={title}>
-                <div className="flex gap-2 items-center text-xl">
-                  <BsCheckCircle className="text-[#62646a]" />
-                  <h4>{title}</h4>
-                </div>
-                <p className="text-[#62646a]">{subtitle}</p>
-              </li>
-            );
-          })}
+        <ul className="flex flex-col gap-6 sm:gap-8 lg:gap-10">
+          {everythingData.map(({ title, subtitle }) => (
+            <li key={title}>
+              <div className="flex gap-2 items-center text-lg sm:text-xl">
+                <BsCheckCircle className="text-[#62646a]" />
+                <h4>{title}</h4>
+              </div>
+              <p className="text-[#62646a] text-sm sm:text-base">{subtitle}</p>
+            </li>
+          ))}
         </ul>
       </div>
-      <div className="relative h-96 w-2/4">
-        <Image src="/everything2.jpg" fill alt="everything" />
+      <div className="relative h-48 sm:h-80 lg:h-96 lg:w-2/4 w-full">
+        <Image src="/everything2.jpg" fill alt="everything" className="rounded-sm object-cover" />
       </div>
     </div>
   );
