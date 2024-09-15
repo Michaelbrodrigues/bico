@@ -17,8 +17,7 @@ function Navbar() {
   const [navFixed, setNavFixed] = useState(false);
   const [searchData, setSearchData] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [{ showLoginModal, showSignupModal, isSeller, userInfo }, dispatch] =
-    useStateProvider();
+  const [{ isSeller, userInfo }, dispatch] = useStateProvider();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Sticky navbar effect
@@ -49,51 +48,38 @@ function Navbar() {
     });
   };
 
-  // Navigate to Orders
-  const handleOrdersNavigate = () => {
-    router.push(isSeller ? "/seller/orders" : "/buyer/orders");
-  };
-
-  // Switch between buyer and seller modes
-  const handleModeSwitch = () => {
-    dispatch({ type: reducerCases.SWITCH_MODE });
-    router.push(isSeller ? "/buyer/orders" : "/seller");
-  };
-
-  const links = [
-    { linkName: "Gigger Business", handler: "#", type: "link" },
-    { linkName: "Explore", handler: "#", type: "link" },
-    { linkName: "Become a Seller", handler: "#", type: "link" },
-    { linkName: "Log in", handler: handleLogin, type: "button" },
-    { linkName: "Sign up", handler: handleSignup, type: "button2" },
-  ];
-
-  // Fetch User Info
+  // Fetch User Info and Redirect to Dashboard
   useEffect(() => {
-    if (cookies.jwt && !userInfo) {
-      const getUserInfo = async () => {
-        try {
-          const { data: { user } } = await axios.post(
-            GET_USER_INFO,
-            {},
-            {
-              withCredentials: true,
-              headers: { Authorization: `Bearer ${cookies.jwt}` },
-            }
-          );
-          dispatch({
-            type: reducerCases.SET_USER,
-            userInfo: { ...user, imageName: user.image ? HOST + "/" + user.image : null },
-          });
-          setIsLoaded(true);
-          if (!user.isProfileSet) router.push("/profile");
-        } catch (err) {
-          console.log("Error fetching user info:", err);
-          // Redirect to login if token invalid
-          router.push("/login");
+    const fetchUserInfo = async () => {
+      try {
+        const { data: { user } } = await axios.post(
+          GET_USER_INFO,
+          {},
+          {
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${cookies.jwt}` },
+          }
+        );
+        dispatch({
+          type: reducerCases.SET_USER,
+          userInfo: { ...user, imageName: user.image ? HOST + "/" + user.image : null },
+        });
+        setIsLoaded(true);
+
+        // Redirect to the appropriate dashboard
+        if (user.isSeller) {
+          router.push("/seller/dashboard");
+        } else {
+          router.push("/buyer/dashboard");
         }
-      };
-      getUserInfo();
+      } catch (err) {
+        console.log("Error fetching user info:", err);
+        router.push("/login");
+      }
+    };
+
+    if (cookies.jwt && !userInfo) {
+      fetchUserInfo();
     } else {
       setIsLoaded(true);
     }
@@ -135,22 +121,27 @@ function Navbar() {
 
           {/* Menu links */}
           <ul className="hidden sm:flex items-center gap-8">
-            {links.map(({ linkName, handler, type }) => (
-              <li key={linkName} className="font-medium text-black">
-                {type === "link" ? (
-                  <Link href={handler}>{linkName}</Link>
-                ) : (
-                  <button
-                    onClick={handler}
-                    className={`${
-                      type === "button2" ? "border border-[#1DBF73] text-[#1DBF73] px-4 py-2 rounded" : ""
-                    } hover:bg-[#1DBF73] hover:text-white transition-all`}
-                  >
-                    {linkName}
-                  </button>
-                )}
+            <li className="font-medium text-black">
+              <Link href="/explore">Explore</Link>
+            </li>
+            {userInfo ? (
+              <li className="font-medium text-black">
+                <button onClick={() => router.push(isSeller ? "/seller/dashboard" : "/buyer/dashboard")}>
+                  Dashboard
+                </button>
               </li>
-            ))}
+            ) : (
+              <>
+                <li className="font-medium text-black">
+                  <button onClick={handleLogin}>Log in</button>
+                </li>
+                <li className="font-medium text-black">
+                  <button onClick={handleSignup} className="border border-[#1DBF73] text-[#1DBF73] px-4 py-2 rounded hover:bg-[#1DBF73] hover:text-white transition-all">
+                    Sign up
+                  </button>
+                </li>
+              </>
+            )}
           </ul>
 
           {/* User profile or mobile menu button */}
@@ -170,22 +161,27 @@ function Navbar() {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <ul className="flex flex-col sm:hidden gap-4 items-center absolute bg-white w-full top-16 left-0 z-50 p-4">
-              {links.map(({ linkName, handler, type }) => (
-                <li key={linkName} className="text-black font-medium">
-                  {type === "link" ? (
-                    <Link href={handler}>{linkName}</Link>
-                  ) : (
-                    <button
-                      onClick={handler}
-                      className={`${
-                        type === "button2" ? "border border-[#1DBF73] text-[#1DBF73] px-4 py-2 rounded" : ""
-                      } hover:bg-[#1DBF73] hover:text-white transition-all`}
-                    >
-                      {linkName}
-                    </button>
-                  )}
+              <li className="text-black font-medium">
+                <Link href="/explore">Explore</Link>
+              </li>
+              {userInfo ? (
+                <li className="text-black font-medium">
+                  <button onClick={() => router.push(isSeller ? "/seller/dashboard" : "/buyer/dashboard")}>
+                    Dashboard
+                  </button>
                 </li>
-              ))}
+              ) : (
+                <>
+                  <li className="text-black font-medium">
+                    <button onClick={handleLogin}>Log in</button>
+                  </li>
+                  <li className="text-black font-medium">
+                    <button onClick={handleSignup} className="border border-[#1DBF73] text-[#1DBF73] px-4 py-2 rounded hover:bg-[#1DBF73] hover:text-white transition-all">
+                      Sign up
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
           )}
         </nav>
