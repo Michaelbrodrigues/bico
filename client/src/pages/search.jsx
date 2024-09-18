@@ -3,10 +3,12 @@ import { SEARCH_GIGS_ROUTE } from "../utils/constants";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+
 function Search() {
   const router = useRouter();
   const { category, q } = router.query;
   const [gigs, setGigs] = useState(undefined);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -22,23 +24,24 @@ function Search() {
     };
     if (category || q) getData();
   }, [category, q]);
+
   return (
     <>
       {gigs && (
-        <div className="mx-24 mb-24">
+        <div className="mx-4 sm:mx-8 lg:mx-24 mb-24">
           {q && (
-            <h3 className="text-4xl mb-10">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl mb-6 lg:mb-10">
               Results for <strong>{q}</strong>
             </h3>
           )}
-          <div className="flex gap-4">
-            <button className="py-3 px-5 border border-gray-400 rounded-lg font-medium">
+          <div className="flex flex-col sm:flex-row sm:gap-4 gap-2 mb-4">
+            <button className="py-2 sm:py-3 px-4 sm:px-5 border border-gray-400 rounded-lg font-medium">
               Category
             </button>
-            <button className="py-3 px-5 border border-gray-400 rounded-lg font-medium">
+            <button className="py-2 sm:py-3 px-4 sm:px-5 border border-gray-400 rounded-lg font-medium">
               Budget
             </button>
-            <button className="py-3 px-5 border border-gray-400 rounded-lg font-medium">
+            <button className="py-2 sm:py-3 px-4 sm:px-5 border border-gray-400 rounded-lg font-medium">
               Delivery Time
             </button>
           </div>
@@ -48,7 +51,7 @@ function Search() {
                 {gigs.length} services available
               </span>
             </div>
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {gigs.map((gig) => (
                 <SearchGridItem gig={gig} key={gig.id} />
               ))}
@@ -61,3 +64,4 @@ function Search() {
 }
 
 export default Search;
+

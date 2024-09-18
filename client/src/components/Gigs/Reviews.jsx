@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 function Reviews() {
   const [{ gigData }] = useStateProvider();
   const [averageRatings, setAverageRatings] = useState("0");
+
   useEffect(() => {
     if (gigData && gigData.reviews.length) {
       let avgRating = 0;
@@ -18,10 +19,12 @@ function Reviews() {
   return (
     <>
       {gigData && (
-        <div className="mb-10">
-          <h3 className="text-2xl my-5 font-normal text-[#404145] ">Reviews</h3>
-          <div className="flex gap-3 mb-5">
-            <h5>{gigData.reviews.length} reviews for this Gig</h5>
+        <div className="mb-10 w-full p-4 sm:p-0">
+          <h3 className="text-2xl my-5 font-normal text-[#404145]">Reviews</h3>
+          
+          {/* Reviews Summary */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-5 items-center">
+            <h5 className="text-sm sm:text-base">{gigData.reviews.length} reviews for this Gig</h5>
             <div className="flex text-yellow-500 items-center gap-2">
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -38,9 +41,13 @@ function Reviews() {
               <span>{averageRatings}</span>
             </div>
           </div>
+
+          {/* Reviews List */}
           <div className="flex flex-col gap-6">
             {gigData.reviews.map((review) => (
-              <div className="flex gap-3 border-t pt-6" key={review.id}>
+              <div className="flex flex-col sm:flex-row gap-3 border-t pt-6" key={review.id}>
+                
+                {/* Reviewer Profile Image */}
                 <div>
                   {review.reviewer.profileImage ? (
                     <Image
@@ -58,24 +65,30 @@ function Reviews() {
                     </div>
                   )}
                 </div>
+
+                {/* Review Content */}
                 <div className="flex flex-col gap-2">
-                  <h4>{review.reviewer.fullName}</h4>
+                  <h4 className="text-sm sm:text-base">{review.reviewer.fullName}</h4>
+                  
+                  {/* Star Ratings */}
                   <div className="flex text-yellow-500 items-center gap-2">
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FaStar
                           key={star}
                           className={`cursor-pointer ${
-                            review.rating >= star
-                              ? "text-yellow-400"
-                              : "text-gray-300"
+                            review.rating >= star ? "text-yellow-400" : "text-gray-300"
                           }`}
                         />
                       ))}
                     </div>
-                    <span>{review.rating}</span>
+                    <span className="text-sm sm:text-base">{review.rating}</span>
                   </div>
-                  <p className="text-[#404145] pr-20">{review.reviewText}</p>
+
+                  {/* Review Text */}
+                  <p className="text-[#404145] pr-4 sm:pr-20 text-sm sm:text-base">
+                    {review.reviewText}
+                  </p>
                 </div>
               </div>
             ))}

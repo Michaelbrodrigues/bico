@@ -28,12 +28,15 @@ function Details() {
   return (
     <>
       {gigData && currentImage !== "" && (
-        <div className="col-span-2 flex flex-col gap-3">
-          <h2 className="text-2xl font-bold text-[#404145] mb-1">
+        <div className="flex flex-col gap-6 p-4 sm:p-6 md:p-10">
+          {/* Gig Title */}
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#404145] mb-2">
             {gigData.title}
           </h2>
-          <div className="flex items-center gap-2">
-            <div>
+
+          {/* Seller and Ratings */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5">
+            <div className="flex items-center gap-3">
               {gigData.createdBy.profileImage ? (
                 <Image
                   src={HOST + "/" + gigData.createdBy.profileImage}
@@ -43,19 +46,18 @@ function Details() {
                   className="rounded-full"
                 />
               ) : (
-                <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
+                <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
                   <span className="text-xl text-white">
                     {gigData.createdBy.email[0].toUpperCase()}
                   </span>
                 </div>
               )}
+              <div className="flex flex-col">
+                <h4 className="text-[#27272a] font-bold">{gigData.createdBy.fullName}</h4>
+                <h6 className="text-[#74767e]">@{gigData.createdBy.username}</h6>
+              </div>
             </div>
-            <div className="flex gap-2 items-center">
-              <h4 className="text-[#27272a] font-bold">
-                {gigData.createdBy.fullName}
-              </h4>
-              <h6 className="text-[#74767e]">@{gigData.createdBy.username}</h6>
-            </div>
+
             <div className="flex items-center gap-1">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -73,8 +75,10 @@ function Details() {
               <span className="text-[#27272a]">({gigData.reviews.length})</span>
             </div>
           </div>
+
+          {/* Gig Images */}
           <div className="flex flex-col gap-4">
-            <div className="max-h-[1000px] max-w-[1000px] overflow-hidden">
+            <div className="max-w-full max-h-full overflow-hidden">
               <Image
                 src={HOST + "/uploads/" + currentImage}
                 alt="Gig"
@@ -100,49 +104,42 @@ function Details() {
                 ))}
             </div>
           </div>
+
+          {/* About the Gig */}
           <div>
-            <h3 className="text-3xl my-5 font-medium text-[#404145]">
+            <h3 className="text-2xl sm:text-3xl my-4 font-medium text-[#404145]">
               About this gig
             </h3>
-            <div>
-              <p>{gigData.description}</p>
-            </div>
+            <p>{gigData.description}</p>
           </div>
-          {/* About the seller */}
-          <div className="">
-            <h3 className="text-3xl my-5 font-medium text-[#404145]">
+
+          {/* About the Seller */}
+          <div>
+            <h3 className="text-2xl sm:text-3xl my-4 font-medium text-[#404145]">
               About the Seller
             </h3>
-            <div className="flex gap-4">
-              <div>
-                {gigData.createdBy.profileImage ? (
-                  <Image
-                    src={HOST + "/" + gigData.createdBy.profileImage}
-                    alt="profile"
-                    height={120}
-                    width={120}
-                    className="rounded-full"
-                  />
-                ) : (
-                  <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
-                    <span className="text-xl text-white">
-                      {gigData.createdBy.email[0].toUpperCase()}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex  gap-2 items-center">
-                  <h4 className="font-medium text-lg">
-                    {gigData.createdBy.fullName}
-                  </h4>
-                  <span className="text-[#74767e]">
-                    @{gigData.createdBy.username}
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              {gigData.createdBy.profileImage ? (
+                <Image
+                  src={HOST + "/" + gigData.createdBy.profileImage}
+                  alt="profile"
+                  height={120}
+                  width={120}
+                  className="rounded-full"
+                />
+              ) : (
+                <div className="bg-purple-500 h-24 w-24 flex items-center justify-center rounded-full">
+                  <span className="text-2xl text-white">
+                    {gigData.createdBy.email[0].toUpperCase()}
                   </span>
                 </div>
-                <div>
-                  <p>{gigData.createdBy.description}</p>
-                </div>
+              )}
+              <div className="flex flex-col gap-1">
+                <h4 className="font-medium text-lg">{gigData.createdBy.fullName}</h4>
+                <span className="text-[#74767e]">@{gigData.createdBy.username}</span>
+                <p>{gigData.createdBy.description}</p>
+
+                {/* Seller Rating */}
                 <div className="flex items-center gap-1">
                   <div className="flex text-yellow-500">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -156,17 +153,17 @@ function Details() {
                       />
                     ))}
                   </div>
-                  <span className="text-yellow-500">
-                    {gigData.averageRating}
-                  </span>
-                  <span className="text-[#74767e]">
-                    ({gigData.totalReviews})
-                  </span>
+                  <span className="text-yellow-500">{gigData.averageRating}</span>
+                  <span className="text-[#74767e]">({gigData.totalReviews})</span>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Reviews Section */}
           <Reviews />
+
+          {/* Add Review Section */}
           {hasOrdered && <AddReview />}
         </div>
       )}
