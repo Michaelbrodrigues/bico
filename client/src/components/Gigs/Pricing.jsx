@@ -13,7 +13,7 @@ function Pricing() {
   return (
     <>
       {gigData && (
-        <div className="sticky top-36 mb-10 h-max w-full sm:w-96">
+        <div className="sticky top-36 mb-10 h-max w-full sm:w-96 mx-4 sm:mx-0">
           <div className="border p-4 sm:p-10 flex flex-col gap-5">
             <div className="flex justify-between">
               <h4 className="text-sm sm:text-md font-normal text-[#74767e]">

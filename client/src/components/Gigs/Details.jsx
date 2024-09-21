@@ -109,7 +109,6 @@ function Details() {
               <p>{gigData.description}</p>
             </div>
           </div>
-          {/* About the seller */}
           <div>
             <h3 className="text-xl sm:text-2xl lg:text-3xl my-5 font-medium text-[#404145]">
               About the Seller

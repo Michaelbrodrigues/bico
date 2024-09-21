@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 function Reviews() {
   const [{ gigData }] = useStateProvider();
   const [averageRatings, setAverageRatings] = useState("0");
-  
+
   useEffect(() => {
     if (gigData && gigData.reviews.length) {
       let avgRating = 0;
