@@ -19,34 +19,36 @@ function Reviews() {
   return (
     <>
       {gigData && (
-        <div className="mb-10 mx-4 sm:mx-8 lg:mx-24">
-          <h3 className="text-xl sm:text-2xl lg:text-3xl my-5 font-normal text-[#404145]">
-            Reviews
-          </h3>
-          <div className="flex flex-wrap gap-3 mb-5">
-            <h5 className="text-sm sm:text-md">
-              {gigData.reviews.length} reviews for this Gig
-            </h5>
-            <div className="flex items-center gap-2">
+        <div className="mb-10 w-full p-4 sm:p-6 lg:p-8">
+          <h3 className="text-xl sm:text-2xl my-5 font-semibold text-[#404145]">Reviews</h3>
+
+          {/* Reviews Summary */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-5 items-center">
+            <h5 className="text-sm sm:text-base">{gigData.reviews.length} reviews for this Gig</h5>
+            <div className="flex items-center gap-2 text-yellow-500">
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
                     key={star}
                     className={`cursor-pointer ${
-                      Math.ceil(averageRatings) >= star
-                        ? "text-yellow-400"
-                        : "text-gray-300"
+                      Math.ceil(averageRatings) >= star ? "text-yellow-400" : "text-gray-300"
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-yellow-500">{averageRatings}</span>
+              <span>{averageRatings}</span>
             </div>
           </div>
+
+          {/* Reviews List */}
           <div className="flex flex-col gap-6">
             {gigData.reviews.map((review) => (
-              <div className="flex gap-3 border-t pt-6" key={review.id}>
-                <div>
+              <div
+                className="flex flex-col sm:flex-row gap-4 border-t pt-6 items-start sm:items-center"
+                key={review.id}
+              >
+                {/* Reviewer Profile Image */}
+                <div className="flex-shrink-0">
                   {review.reviewer.profileImage ? (
                     <Image
                       src={HOST + "/" + review.reviewer.profileImage}
@@ -56,31 +58,35 @@ function Reviews() {
                       className="rounded-full"
                     />
                   ) : (
-                    <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full relative">
+                    <div className="bg-purple-500 h-10 w-10 flex items-center justify-center rounded-full">
                       <span className="text-xl text-white">
                         {review.reviewer.email[0].toUpperCase()}
                       </span>
                     </div>
                   )}
                 </div>
-                <div className="flex flex-col gap-2">
-                  <h4 className="text-sm sm:text-md">{review.reviewer.fullName}</h4>
-                  <div className="flex text-yellow-500 items-center gap-2">
+
+                {/* Review Content */}
+                <div className="flex flex-col gap-2 w-full">
+                  <h4 className="text-sm sm:text-base font-semibold">{review.reviewer.fullName}</h4>
+
+                  {/* Star Ratings */}
+                  <div className="flex items-center gap-2 text-yellow-500">
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <FaStar
                           key={star}
                           className={`cursor-pointer ${
-                            review.rating >= star
-                              ? "text-yellow-400"
-                              : "text-gray-300"
+                            review.rating >= star ? "text-yellow-400" : "text-gray-300"
                           }`}
                         />
                       ))}
                     </div>
-                    <span>{review.rating}</span>
+                    <span className="text-sm sm:text-base">{review.rating}</span>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#404145] pr-4 sm:pr-20">
+
+                  {/* Review Text */}
+                  <p className="text-[#404145] text-sm sm:text-base leading-relaxed">
                     {review.reviewText}
                   </p>
                 </div>
