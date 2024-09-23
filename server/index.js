@@ -7,6 +7,7 @@ import { gigRoutes } from "./routes/GigRoutes.js";
 import { orderRoutes } from "./routes/OrderRoutes.js";
 import { messageRoutes } from "./routes/MessageRoutes.js";
 import { dashboardRoutes } from "./routes/DashboardRoutes.js";
+import uploadRoutes from './routes/uploadRoutes.js'; // Adjust the path as needed
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use("/api/gigs", gigRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use('/api', uploadRoutes);
 
 // Handle 404 for unknown routes
 app.use((req, res) => {

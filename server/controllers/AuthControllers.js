@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { genSalt, hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { renameSync } from "fs";
+import cloudinary from '../cloudinaryConfig.js';
 
 const generatePassword = async (password) => {
   const salt = await genSalt();
@@ -145,26 +146,30 @@ export const setUserInfo = async (req, res, next) => {
   }
 };
 
-export const setUserImage = async (req, res, next) => {
-  // try {
-  //   if (req.file) {
-  //     if (req?.userId) {
-  //       const date = Date.now();
-  //       let fileName = "uploads/profiles/" + date + req.file.originalname;
-  //       renameSync(req.file.path, fileName);
-  //       const prisma = new PrismaClient();
 
-  //       await prisma.user.update({
-  //         where: { id: req.userId },
-  //         data: { profileImage: fileName },
-  //       });
-  //       return res.status(200).json({ img: fileName });
-  //     }
-  //     return res.status(400).send("Cookie Error.");
-  //   }
-  //   return res.status(400).send("Image not inclued.");
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(500).send("Internal Server Occured");
-  // }
+export const setUserImage = async (req, res, next) => {
+  try {
+    if (req.file) {
+      if (req?.userId) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'profiles',
+        });
+
+        const prisma = new PrismaClient();
+
+        await prisma.user.update({
+          where: { id: req.userId },
+          data: { profileImage: result.url },
+        });
+
+        return res.status(200).json({ img: result.url });
+      }
+      return res.status(400).send("Cookie Error.");
+    }
+    return res.status(400).send("Image not included.");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error Occurred");
+  }
 };
+

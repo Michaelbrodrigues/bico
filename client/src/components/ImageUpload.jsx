@@ -1,11 +1,14 @@
 // @ts-nocheck
 import Image from "next/image";
 import React from "react";
+import axios from "axios";
 
 function ImageUpload({ files, setFile }) {
   const { useState } = React;
 
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   const handleFile = (e) => {
     setMessage("");
     let file = e.target.files;
@@ -24,10 +27,33 @@ function ImageUpload({ files, setFile }) {
   const removeImage = (i) => {
     setFile(files.filter((x) => x.name !== i));
   };
+
+  const uploadImages = async () => {
+    setUploading(true);
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    try {
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setMessage("Images uploaded successfully!");
+      setFile([]);
+    } catch (error) {
+      setMessage("Image upload failed.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div>
-      <div className="flex  items-center px-3">
-        <div className="rounded-lg  bg-gray-50 w-full">
+      <div className="flex items-center px-3">
+        <div className="rounded-lg bg-gray-50 w-full">
           <div className="m-4">
             <span className="flex justify-center items-center text-[12px] mb-1 text-red-500">
               {message}
@@ -79,6 +105,13 @@ function ImageUpload({ files, setFile }) {
                 );
               })}
             </div>
+            <button
+              onClick={uploadImages}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload Images"}
+            </button>
           </div>
         </div>
       </div>

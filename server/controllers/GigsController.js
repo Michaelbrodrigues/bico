@@ -1,55 +1,55 @@
+import { v2 as cloudinary } from 'cloudinary';
 import { PrismaClient } from "@prisma/client";
-
 import { existsSync, renameSync, unlinkSync } from "fs";
 
 export const addGig = async (req, res, next) => {
-  // try {
-  //   if (req.files) {
-  //     const fileKeys = Object.keys(req.files);
-  //     const fileNames = [];
-  //     fileKeys.forEach((file) => {
-  //       const date = Date.now();
-  //       renameSync(
-  //         req.files[file].path,
-  //         "uploads/" + date + req.files[file].originalname
-  //       );
-  //       fileNames.push(date + req.files[file].originalname);
-  //     });
-  //     if (req.query) {
-  //       const {
-  //         title,
-  //         description,
-  //         category,
-  //         features,
-  //         price,
-  //         revisions,
-  //         time,
-  //         shortDesc,
-  //       } = req.query;
-  //       const prisma = new PrismaClient();
-  //       await prisma.gigs.create({
-  //         data: {
-  //           title,
-  //           description,
-  //           deliveryTime: parseInt(time),
-  //           category,
-  //           features,
-  //           price: parseInt(price),
-  //           shortDesc,
-  //           revisions: parseInt(revisions),
-  //           createdBy: { connect: { id: req.userId } },
-  //           images: fileNames,
-  //         },
-  //       });
-  //       return res.status(201).send("Successfully created the gig.");
-  //     }
-  //   }
-  //   return res.status(400).send("All properties should be required.");
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.status(500).send("Internal Server Error");
-  // }
+  try {
+    if (req.files) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: 'gigs',
+        })
+      );
+
+      const uploadResults = await Promise.all(uploadPromises);
+      const fileNames = uploadResults.map((result) => result.secure_url);
+
+      if (req.query) {
+        const {
+          title,
+          description,
+          category,
+          features,
+          price,
+          revisions,
+          time,
+          shortDesc,
+        } = req.query;
+        const prisma = new PrismaClient();
+        await prisma.gigs.create({
+          data: {
+            title,
+            description,
+            deliveryTime: parseInt(time),
+            category,
+            features,
+            price: parseInt(price),
+            shortDesc,
+            revisions: parseInt(revisions),
+            createdBy: { connect: { id: req.userId } },
+            images: fileNames,
+          },
+        });
+        return res.status(201).send("Successfully created the gig.");
+      }
+    }
+    return res.status(400).send("All properties should be required.");
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("Internal Server Error");
+  }
 };
+
 
 // Function to delete a gig
 export const deleteGig = async (req, res, next) => {
@@ -135,59 +135,59 @@ export const getGigData = async (req, res, next) => {
 };
 
 export const editGig = async (req, res, next) => {
-  // try {
-  //   if (req.files) {
-  //     const fileKeys = Object.keys(req.files);
-  //     const fileNames = [];
-  //     fileKeys.forEach((file) => {
-  //       const date = Date.now();
-  //       renameSync(
-  //         req.files[file].path,
-  //         "uploads/" + date + req.files[file].originalname
-  //       );
-  //       fileNames.push(date + req.files[file].originalname);
-  //     });
-  //     if (req.query) {
-  //       const {
-  //         title,
-  //         description,
-  //         category,
-  //         features,
-  //         price,
-  //         revisions,
-  //         time,
-  //         shortDesc,
-  //       } = req.query;
-  //       const prisma = new PrismaClient();
-  //       const oldData = await prisma.gigs.findUnique({
-  //         where: { id: req.params.gigId },
-  //       });
-  //       await prisma.gigs.update({
-  //         where: { id: req.params.gigId },
-  //         data: {
-  //           title,
-  //           description,
-  //           deliveryTime: parseInt(time),
-  //           category,
-  //           features,
-  //           price: parseInt(price),
-  //           shortDesc,
-  //           revisions: parseInt(revisions),
-  //           createdBy: { connect: { id: req.userId } },
-  //           images: fileNames,
-  //         },
-  //       });
-  //       oldData?.images.forEach((image) => {
-  //         if (existsSync(`uploads/${image}`)) unlinkSync(`uploads/${image}`);
-  //       });
-  //       return res.status(201).send("Successfully Eited the gig.");
-  //     }
-  //   }
-  //   return res.status(400).send("All properties should be required.");
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.status(500).send("Internal Server Error");
-  // }
+  try {
+    if (req.files) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: 'gigs',
+        })
+      );
+
+      const uploadResults = await Promise.all(uploadPromises);
+      const fileNames = uploadResults.map((result) => result.secure_url);
+
+      if (req.query) {
+        const {
+          title,
+          description,
+          category,
+          features,
+          price,
+          revisions,
+          time,
+          shortDesc,
+        } = req.query;
+        const prisma = new PrismaClient();
+        const oldData = await prisma.gigs.findUnique({
+          where: { id: req.params.gigId },
+        });
+        await prisma.gigs.update({
+          where: { id: req.params.gigId },
+          data: {
+            title,
+            description,
+            deliveryTime: parseInt(time),
+            category,
+            features,
+            price: parseInt(price),
+            shortDesc,
+            revisions: parseInt(revisions),
+            createdBy: { connect: { id: req.userId } },
+            images: fileNames,
+          },
+        });
+        oldData?.images.forEach((image) => {
+          const publicId = image.split('/').pop().split('.')[0];
+          cloudinary.uploader.destroy(`gigs/${publicId}`);
+        });
+        return res.status(201).send("Successfully edited the gig.");
+      }
+    }
+    return res.status(400).send("All properties should be required.");
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("Internal Server Error");
+  }
 };
 
 export const searchGigs = async (req, res, next) => {

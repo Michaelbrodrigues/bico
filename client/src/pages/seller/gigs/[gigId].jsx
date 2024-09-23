@@ -86,7 +86,7 @@ function EditGig() {
   const editGig = async () => {
     const { category, description, price, revisions, time, title, shortDesc } =
       data;
-
+  
     if (
       category &&
       description &&
@@ -100,33 +100,36 @@ function EditGig() {
     ) {
       const formData = new FormData();
       files.forEach((file) => formData.append("images", file));
-      const gigData = {
-        title,
-        description,
-        category,
-        features,
-        price,
-        revisions,
-        time,
-        shortDesc,
-      };
-      const response = await axios.put(
-        `${EDIT_GIG_DATA}/${gigId}`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${cookies.jwt}`,
-          },
-          params: gigData,
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("features", JSON.stringify(features));
+      formData.append("price", price);
+      formData.append("revisions", revisions);
+      formData.append("time", time);
+      formData.append("shortDesc", shortDesc);
+  
+      try {
+        const response = await axios.put(
+          `${EDIT_GIG_DATA}/${gigId}`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          }
+        );
+        if (response.status === 201) {
+          router.push("/seller/gigs");
         }
-      );
-      if (response.status === 201) {
-        router.push("/seller/gigs");
+      } catch (error) {
+        console.log(error);
       }
     }
   };
+  
 
   return (
     <div className="min-h-[80vh] my-10 mt-0 px-32">
