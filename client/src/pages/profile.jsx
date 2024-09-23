@@ -81,6 +81,9 @@ function Profile() {
             withCredentials: true,
             headers: {
               "Content-Type": "multipart/form-data",
+              headers: {
+                Authorization: `Bearer ${cookies.jwt}`,
+              },
             },
           });
           imageName = img;
