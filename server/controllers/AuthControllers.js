@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { genSalt, hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { renameSync } from "fs";
-import cloudinary from '../cloudinaryConfig.js';
+import cloudinary from "../cloudinaryConfig.js";
 
 const generatePassword = async (password) => {
   const salt = await genSalt();
@@ -82,7 +82,7 @@ export const login = async (req, res, next) => {
 export const getUserInfo = async (req, res, next) => {
   try {
     if (req?.userId) {
-      console.log(req?.userId)
+      console.log(req?.userId);
       const prisma = new PrismaClient();
       const user = await prisma.user.findUnique({
         where: {
@@ -146,30 +146,32 @@ export const setUserInfo = async (req, res, next) => {
   }
 };
 
-
 export const setUserImage = async (req, res, next) => {
   try {
-    if (req.file) {
-      if (req?.userId) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'profiles',
-        });
-
-        const prisma = new PrismaClient();
-
-        await prisma.user.update({
-          where: { id: req.userId },
-          data: { profileImage: result.url },
-        });
-
-        return res.status(200).json({ img: result.url });
-      }
-      return res.status(400).send("Cookie Error.");
+    if (!req.file) {
+      return res.status(400).json({
+        error: "No file uploaded",
+      });
     }
-    return res.status(400).send("Image not included.");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal Server Error Occurred");
+
+    if (req?.userId) {
+      const url = req.file.path || req.file.secure_url;
+
+      const prisma = new PrismaClient();
+
+      await prisma.user.update({
+        where: { id: req.userId },
+        data: { profileImage: url },
+      });
+
+      return res.status(200).json({ img: result.url });
+    }
+
+    return res.status(400).send("Cookie Error.");
+  } catch (error) {
+    res.status(500).json({
+      error: "File upload failed",
+      details: error.message,
+    });
   }
 };
-

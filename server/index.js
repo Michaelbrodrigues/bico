@@ -7,7 +7,7 @@ import { gigRoutes } from "./routes/GigRoutes.js";
 import { orderRoutes } from "./routes/OrderRoutes.js";
 import { messageRoutes } from "./routes/MessageRoutes.js";
 import { dashboardRoutes } from "./routes/DashboardRoutes.js";
-import uploadRoutes from './routes/uploadRoutes.js'; // Adjust the path as needed
+import uploadRoutes from "./routes/uploadRoutes.js"; // Adjust the path as needed
 
 dotenv.config();
 
@@ -17,7 +17,11 @@ const port = process.env.PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: ["https://bico-client.vercel.app", "https://bicotestclient.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://bico-client.vercel.app",
+      "https://bicotestclient.vercel.app",
+      "http://localhost:3000",
+    ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -33,7 +37,7 @@ app.use("/api/gigs", gigRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use('/api', uploadRoutes);
+app.use("/api", uploadRoutes);
 
 // Handle 404 for unknown routes
 app.use((req, res) => {
