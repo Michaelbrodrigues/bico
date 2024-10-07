@@ -87,11 +87,7 @@ function Navbar() {
       const getUserInfo = async () => {
         try {
           const {
-            data: { user },
-          } = await axios.post(
-            GET_USER_INFO,
-            {},
-            {
+            data: { user }, } = await axios.post(GET_USER_INFO, {
               withCredentials: true,
               headers: {
                 Authorization: `Bearer ${cookies.jwt}`,
