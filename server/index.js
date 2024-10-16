@@ -16,7 +16,7 @@ const port = process.env.PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: ["https://bico-client.vercel.app", "https://bicotestclient.vercel.app", "http://localhost:3000"],
+    origin: ["https://workingbico.vercel.app","https://bico-client.vercel.app", "https://bicotestclient.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
