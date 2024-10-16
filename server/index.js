@@ -16,16 +16,13 @@ const port = process.env.PORT || 3001;
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    "https://bico-client.vercel.app",
-    "https://bicotestclient.vercel.app",
-    "http://localhost:3000",
-  ],
+  origin: '*', // Allow all origins temporarily
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 };
 
+app.use(cors(corsOptions)); // Apply CORS middleware first
 app.options('*', cors(corsOptions)); // Handle preflight requests
 
 app.use(cookieParser());
@@ -38,6 +35,11 @@ app.use('/api/orders', cors(corsOptions), orderRoutes);
 app.use('/api/messages', cors(corsOptions), messageRoutes);
 app.use('/api/dashboard', cors(corsOptions), dashboardRoutes);
 app.use('/api', cors(corsOptions), uploadRoutes);
+
+// Test route to verify CORS
+app.get('/test-cors', cors(corsOptions), (req, res) => {
+  res.json({ message: 'CORS is working!' });
+});
 
 // Handle 404 for unknown routes
 app.use((req, res) => {
