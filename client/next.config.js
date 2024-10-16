@@ -26,7 +26,7 @@ const nextConfig = {
           {
             key: 'Access-Control-Allow-Origin',
             // Replace with your domain
-            value: 'https://bico-client.vercel.app',
+            value: "https://workingbico.vercel.app",
           },
           {
             key: 'Access-Control-Allow-Methods',
