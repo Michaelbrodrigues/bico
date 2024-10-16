@@ -15,29 +15,27 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // CORS configuration
-app.use(
-  cors({
-    origin: [
-      "https://bico-client.vercel.app",
-      "https://bicotestclient.vercel.app",
-      "http://localhost:3000",
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: [
+    "https://bico-client.vercel.app",
+    "https://bicotestclient.vercel.app",
+    "http://localhost:3000",
+  ],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
 app.use(cookieParser());
 app.use(express.json());
 
-// Define API routes
-app.use("/api/auth", authRoutes);
-app.use("/api/gigs", gigRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/dashboard", dashboardRoutes);
-app.use("/api", uploadRoutes);
+// Apply CORS middleware to specific routes
+app.use('/api/auth', cors(corsOptions), authRoutes);
+app.use('/api/gigs', cors(corsOptions), gigRoutes);
+app.use('/api/orders', cors(corsOptions), orderRoutes);
+app.use('/api/messages', cors(corsOptions), messageRoutes);
+app.use('/api/dashboard', cors(corsOptions), dashboardRoutes);
+app.use('/api', cors(corsOptions), uploadRoutes);
 
 // Handle 404 for unknown routes
 app.use((req, res) => {
