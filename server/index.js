@@ -15,31 +15,27 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // CORS configuration
-const corsOptions = {
-  origin: ["https://workingbico.vercel.app","https://bico-client.vercel.app", "https://bicotestclient.vercel.app", "http://localhost:3000"],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: ["https://workingbico.vercel.app","https://bico-client.vercel.app", "https://bicotestclient.vercel.app", "http://localhost:3000"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
-app.use(cors(corsOptions)); // Apply CORS middleware first
-app.options('*', cors(corsOptions)); // Handle preflight requests
+
 
 app.use(cookieParser());
 app.use(express.json());
 
-// Apply CORS middleware to specific routes
-app.use('/api/auth', cors(corsOptions), authRoutes);
-app.use('/api/gigs', cors(corsOptions), gigRoutes);
-app.use('/api/orders', cors(corsOptions), orderRoutes);
-app.use('/api/messages', cors(corsOptions), messageRoutes);
-app.use('/api/dashboard', cors(corsOptions), dashboardRoutes);
-app.use('/api', cors(corsOptions), uploadRoutes);
+// Define API routes
+app.use("/api/auth", authRoutes);
+app.use("/api/gigs", gigRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
-// Test route to verify CORS
-app.get('/test-cors', cors(corsOptions), (req, res) => {
-  res.json({ message: 'CORS is working!' });
-});
 
 // Handle 404 for unknown routes
 app.use((req, res) => {

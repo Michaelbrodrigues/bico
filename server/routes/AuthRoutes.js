@@ -7,8 +7,8 @@ import {
   signup,
 } from "../controllers/AuthControllers.js";
 import { verifyToken } from "../middlewares/AuthMiddleware.js";
-import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
+//import multer from "multer";
+//import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinaryConfig from "../cloudinaryConfig.js";
 
 const authRoutes = Router();
@@ -22,7 +22,7 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+//const upload = multer({ storage: storage });
 
 authRoutes.post("/signup", signup);
 authRoutes.post("/login", login);
