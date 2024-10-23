@@ -17,7 +17,7 @@ const nextConfig = {
     return [
       {
         // Apply headers to all routes
-        source: '/api/login/:path*',
+        source: '/(.*)',
         headers: [
           {
             key: 'Access-Control-Allow-Credentials',
